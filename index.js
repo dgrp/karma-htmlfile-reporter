@@ -116,17 +116,20 @@ var HTMLReporter = function(baseReporterDecorator, config, emitter, logger, help
 
   this.specSuccess = this.specSkipped = this.specFailure = function(browser, result) {
     var specClass = result.skipped ? 'skip' : (result.success ? 'pass' : 'fail');
-    var spec = suites[browser.id].ele('tr', {class:specClass});
-    var suiteColumn;
-
-    spec.ele('td', {}, result.skipped ? 'Skipped' : (result.success ? ('Passed in ' + ((result.time || 0) / 1000) + 's') : 'Failed'));
-    spec.ele('td', {}, result.description);
-    suiteColumn = spec.ele('td', {}).raw(result.suite.join(' &raquo; '));
-
-    if (!result.success) {
-      result.log.forEach(function(err) {
-        suiteColumn.raw('<br />' + formatError(err));
-      });
+    var suite = suites[browser.id];
+    if (suite) {
+      var spec = suite.ele('tr', {class:specClass});
+      var suiteColumn;
+  
+      spec.ele('td', {}, result.skipped ? 'Skipped' : (result.success ? ('Passed in ' + ((result.time || 0) / 1000) + 's') : 'Failed'));
+      spec.ele('td', {}, result.description);
+      suiteColumn = spec.ele('td', {}).raw(result.suite.join(' &raquo; '));
+  
+      if (!result.success) {
+        result.log.forEach(function(err) {
+          suiteColumn.raw('<br />' + formatError(err));
+        });
+      }
     }
   };
 
