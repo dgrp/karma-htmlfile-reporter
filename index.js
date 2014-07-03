@@ -51,6 +51,8 @@ var HTMLReporter = function(baseReporterDecorator, config, emitter, logger, help
     suites = {};
     html = builder.create('html', null, 'html');
     html.documentObject.children.shift();
+    
+    allMessages.length = 0;
   };
 
   this.onBrowserStart = function (browser){
@@ -110,8 +112,10 @@ var HTMLReporter = function(baseReporterDecorator, config, emitter, logger, help
       });
     });
 
-    suites = html = null;
-    allMessages.length = 0;
+    // Probably not preferred, but at least it fixes a crash when a test times out,
+    // for example when you're debugging it.
+    //suites = html = null;
+    //allMessages.length = 0;
   };
 
   this.specSuccess = this.specSkipped = this.specFailure = function(browser, result) {
