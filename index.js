@@ -72,16 +72,18 @@ var HTMLReporter = function(baseReporterDecorator, config, emitter, logger, help
 
   this.onBrowserComplete = function(browser) {
     var suite = suites[browser.id];
-    var result = browser.lastResult;
+    if (suite) {
+      var result = browser.lastResult;
 
-    suite['results'].txt(result.total + ' tests / ');
-    suite['results'].txt((result.disconnected || result.error ? 1 : 0) + ' errors / ');
-    suite['results'].txt(result.failed + ' failures / ');
-    suite['results'].txt(result.skipped + ' skipped / ');
-    suite['results'].txt('runtime: ' + ((result.netTime || 0) / 1000) + 's');
-
-    if (allMessages.length > 0) {
-        suite.ele('tr', {class:'system-out'}).ele('td', {colspan:'3'}).raw('<strong>System output:</strong><br />' + allMessages.join('<br />'));
+      suite['results'].txt(result.total + ' tests / ');
+      suite['results'].txt((result.disconnected || result.error ? 1 : 0) + ' errors / ');
+      suite['results'].txt(result.failed + ' failures / ');
+      suite['results'].txt(result.skipped + ' skipped / ');
+      suite['results'].txt('runtime: ' + ((result.netTime || 0) / 1000) + 's');
+  
+      if (allMessages.length > 0) {
+          suite.ele('tr', {class:'system-out'}).ele('td', {colspan:'3'}).raw('<strong>System output:</strong><br />' + allMessages.join('<br />'));
+      }
     }
   };
 
